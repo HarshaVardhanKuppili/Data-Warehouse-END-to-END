@@ -1,12 +1,12 @@
 -- Bulk Insert
 Use Import/Export Option to easily Load the Data.
 Or 
-Use the Below Code for All tables
+Use the Below Code for All tables -------> i have Used for only One table but Need to write SQL CODE for all 5 tables if required.
 
 
--- Keep Truncate if you require --
+-- Keep Truncate if you require when you need to refresh the table with new information--
 
-
+TRUNCATE TABLE bronze.crm_cust_info
 COPY bronze.crm_cust_info (
     cst_id,
     cst_key,
