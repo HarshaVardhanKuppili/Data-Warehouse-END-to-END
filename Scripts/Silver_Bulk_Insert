@@ -1,0 +1,26 @@
+-- check for NULLS and DUPLICATE in Primary Key--
+---- DATA CLENSING STARTED -----
+--------------------------------
+--- Going Through cst_id One by Once to correct them
+SELECT * FROM bronze.crm_cust_info
+WHERE cst_id IN (29466);
+-- 29473,29449,29433,29483--
+
+-------- Used Transaction to be safe when deleting
+BEGIN;
+DELETE FROM bronze.crm_cust_info
+WHERE cst_create_date IN ( '2026-01-26','2026-01-25')
+--WHERE cst_create_date = '2026-01-26' OR cst_create_date ='2026-01-25' 
+--This will delete:
+-- All rows with cst_create_date = '2026-01-26' (no matter the ID)
+--AND rows where:
+AND cst_id = 29466
+AND cst_id IN (29466)
+ROLLBACK;
+COMMIT;
+
+------ Using WINDOW FUNCTION to DELETE like above
+
+SELECT cst_create_date,cst_id, RANK() OVER(ORDER BY cst_create_date DESC) AS Rank_, ROW_NUMBER() OVER(partition BY cst_create_date ORDER BY cst_create_date DESC) AS ROW_NUMBER_
+FROM bronze.crm_cust_info
+WHERE cst_id IN (29473)
