@@ -25,3 +25,34 @@ WITH (
     NULL '',
     ENCODING 'UTF8'
 );
+
+
+--------CREATING STORE PROCEDURE FOR RUNNING ALL 6 TABLE IMPORT
+
+CREATE ALTER PROCEDURE bronze.load_bronze AS
+
+BEGIN
+
+TRUNCATE TABLE bronze.crm_cust_info
+COPY bronze.crm_cust_info (
+    cst_id,
+    cst_key,
+    cst_firstname,
+    cst_lastname,
+    cst_marital_status,
+    cst_gndr,
+    cst_create_date
+)
+FROM 'C:/SQL/cust_info.csv'  -------> "" YOUR PATH  ""
+WITH (
+    FORMAT csv,
+    HEADER true,
+    DELIMITER ',',
+    QUOTE '"',
+    NULL '',
+    ENCODING 'UTF8'
+);
+
+
+
+END
