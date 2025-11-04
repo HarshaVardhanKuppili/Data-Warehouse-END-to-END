@@ -21,6 +21,25 @@ COMMIT;
 
 ------ Using WINDOW FUNCTION to DELETE like above
 
-SELECT cst_create_date,cst_id, RANK() OVER(ORDER BY cst_create_date DESC) AS Rank_, ROW_NUMBER() OVER(partition BY cst_create_date ORDER BY cst_create_date DESC) AS ROW_NUMBER_
-FROM bronze.crm_cust_info
-WHERE cst_id IN (29473)
+------ Using WINDOW FUNCTION to DELETE like above
+
+BEGIN;
+WITH Latest_entry AS
+		
+		(SELECT cst_create_date,cst_id, RANK() OVER(Partition BY cst_id ORDER BY cst_create_date DESC) AS Rank_, ROW_NUMBER() OVER(partition BY cst_id ORDER BY cst_create_date DESC) AS ROW_NUMBER_
+		FROM bronze.crm_cust_info
+		WHERE cst_id IN (29473,29449,29433,29483))
+
+
+--BEGIN; this cant be here CTE must follow the below
+DELETE FROM bronze.crm_cust_info
+WHERE (cst_create_date,cst_id) IN 
+	(SELECT cst_create_date,cst_id
+	FROM Latest_entry
+	WHERE Rank_ >1)
+
+
+SELECT * FROM bronze.crm_cust_info
+WHERE cst_id IN (29466,29473,29449,29433,29483);
+-- 29473,29449,29433,29483
+COMMIT;
