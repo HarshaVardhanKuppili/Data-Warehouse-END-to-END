@@ -1,3 +1,8 @@
+===============================
+Create Database and Schemas
+================================
+
+
 -- Create Database for 
 CREATE DATABASE "DataWarehouse";
 
