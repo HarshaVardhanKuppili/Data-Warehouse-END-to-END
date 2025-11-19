@@ -54,7 +54,7 @@ Outputs include clean **fact & dimension views** used for **Power BI analytics**
         ┌────────────────────────┐
         │         SILVER         │
         │ Cleaning, Standardise  │
-        │ Dedup, Transform       │
+        │ , Transform            │
         └──────────┬─────────────┘
                    |
                    ▼
