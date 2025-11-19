@@ -1,17 +1,103 @@
 # Data-Warehouse-END-to-END
-Will Be updated periodically
-ETL - From Source i have incorporated 3 layers bronze, silver, gold layer as my data architecture 
-There are multiple standard in data warehouse we can sit with stakeholder to bulidit and then decide what needs to be done.
-Task - Design data architecture like building house - blueprint - flow integrate and be accessed. scalable and easyto maintain - brainstorm and design.
-data architecture has -1 Data warehouse this is most organised - 2 Data lake good for big data not structured - 3 Data lakehouse is mix of both - 4 data mesh its decentralised .
-How to build data warehouse - 4 approaches - 
-Inmon Approach --- stage Entreprose data warehouse 3NF - Data Marts (foucus on one like customers and sales and connect to BI.
-Kimbaall - stage - Data mart - BI
-Data Vault - Stage - Raw Vault - Business Vault (business rules and tranformation  - Data Marts - BI
-Medallion Architecture - Bronze(is similar to stage its original as it is and help tracebility and find issues) - Silver ( where we do tranformations and cleansing but dont apply any riules) - Gold (its ike data marts, different objects not only for report but for ML,AI)
-We need to decide and confirm one of the above and use it as first step on building architecture.
+📦 Data Warehouse Project (PostgreSQL + Medallion Architecture)
 
-Secret priciple - SOC - Seperation of Concerns - this is what is bronze, silver and gold layer does.
-Naming convention - should have standardised - camel case - kebab case - snake case - we are going with snake case.
+This project demonstrates an end-to-end data warehousing pipeline using PostgreSQL, following the Medallion Architecture (Bronze → Silver → Gold).
+It includes raw data ingestion, data cleaning, dimensional modelling, and creation of analytics-ready fact & dimension views used for Power BI dashboards.
 
-Besigning BRONZE - setup meeting with stakeholder - Understand Who own the Data ?, What Business Process it supports ? and System and Data Documentation ?, dara Model and Catalog ? - How is data stored? (SQL,Oracel, AWS)- what are the integration capabilities like API, File extract direct DB, - Incremental VS Full Load, Data scope and Historical Needs - 
+🚀 Project Overview
+
+I designed a PostgreSQL-based data warehouse that integrates CRM and ERP data covering customers, sales, products, categories, and locations.
+The warehouse is structured in three layers, each with its own purpose and transformation logic:
+
+🔹 Bronze Layer – Raw Ingestion
+
+Created bronze schema with staging tables for CRM and ERP sources.
+
+Loaded CSV data using PostgreSQL COPY commands.
+
+Ensured repeatable ingestion using TRUNCATE for clean reloads.
+
+🔸 Silver Layer – Cleansing & Standardisation
+
+Applied data quality rules and transformations:
+
+Normalised text fields using TRIM, UPPER, and COALESCE.
+
+Removed duplicate customer records using window functions:
+
+ROW_NUMBER()
+
+RANK()
+
+Standardised gender and marital status using CASE logic.
+
+Ensured consistent date formats and numeric types.
+
+Joined CRM + ERP tables to enrich customer and product datasets.
+
+🟡 Gold Layer – Dimensional Modelling
+
+Created analytics-ready views following a star schema:
+
+gold.dim_customers – Cleaned & enriched customer dimension
+
+gold.dim_products – CRM product attributes + ERP category hierarchy
+
+gold.fact_sales – Fact view with order, product, customer, dates, quantity, and revenue
+
+These views power downstream dashboards such as:
+
+Sales Analysis
+
+Product Performance
+
+Customer Segmentation
+
+Category Profitability
+
+🧠 Key SQL Techniques Used
+Data Definition & Structuring
+
+CREATE SCHEMA, CREATE TABLE, DROP TABLE, CREATE VIEW
+
+Proper layering of Bronze → Silver → Gold
+
+Data Ingestion
+
+PostgreSQL COPY … FROM for fast bulk loading
+
+Data Cleaning
+
+TRIM(), UPPER(), COALESCE()
+
+CASE WHEN mappings for business rules
+
+Date standardisation and type corrections
+
+Window Functions
+
+ROW_NUMBER() for latest-record selection
+
+RANK() for de-duplication and SCD-style logic
+
+Joins & Modelling
+
+LEFT JOIN to build dimensions
+
+Merging CRM + ERP sources
+
+Fact/dimension separation aligned with star schema design
+
+Data Quality Validation
+
+Duplicate key checks (GROUP BY … HAVING COUNT(*) > 1)
+
+Range checks (MIN() / MAX())
+
+📊 Final Output
+
+Clean, reliable fact-sales model for reporting
+
+Customer and product dimensions enriched from multiple systems
+
+A complete SQL-driven pipeline, ready for BI tools such as Power BI, Tableau, and Looker
