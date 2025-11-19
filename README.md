@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/Power%20BI-Ready-orange?style=for-the-badge" />
 </p>
 
-<h1 align="center">📦 Data Warehouse Project (PostgreSQL + Medallion Architecture)</h1>
+<h1 align="center">📦 Data Warehouse Project (PostgreSQL + Medallion Architecture + PowerBI)</h1>
 
 <p align="center">
 End-to-end SQL-driven Data Warehouse using Bronze → Silver → Gold layers, with dimensional modelling and BI-ready outputs.
